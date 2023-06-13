@@ -1,0 +1,27 @@
+.toggle-back{
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.toggle-back_active{
+  background-color: #2BE080;
+}
+.toggle-back_inactive{
+  background-color: #E8E8E8;
+}
+.toggle-front{
+  position: absolute;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #FFF;
+}
+.toggle-front_active{
+  right: 2px;
+}
+.toggle-front_inactive{
+  left: 2px;
+}

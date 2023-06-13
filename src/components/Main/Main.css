@@ -1,0 +1,20 @@
+.section__title{
+  margin: 0 0 23px;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+}
+.section__hr{
+  border-bottom: 1px solid #000;
+}
+
+@media screen and (max-width: 1024px){
+
+}
+@media screen and (max-width: 425px) {
+  .section__title{
+    margin: 0 0 28px;
+    font-size: 18px;
+    line-height: 22px;
+  }
+}
