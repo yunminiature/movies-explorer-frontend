@@ -45,6 +45,7 @@
   border-bottom: 1px solid #E8E8E8;
   color: #000;
 }
+/* элементы формы выделяются, когда на них установлен фокус */
 .auth-form__input:focus:valid{
   border-bottom: 1px solid #2BE080;
 }

@@ -20,7 +20,7 @@
   border: 0;
   border-radius: 3px;
   background-color: #2BE080;
-  color: #FFF;
+  color: #000;
   transition: opacity 0.5s;
   cursor: pointer;
 }
@@ -81,7 +81,7 @@
 .header__menu-icon{
   height: 43px;
   width: 40px;
-  background: url('../../images/menu_icon.png');
+  background: url('../../images/menu_icon.svg');
   transition: opacity 0.5s;
   cursor: pointer;
 }
@@ -90,7 +90,7 @@
   transition: opacity 0.5s;
 }
 .header__menu{
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
@@ -99,7 +99,7 @@
   z-index: 2;
 }
 .header__menu-container{
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   height: 100vh;
@@ -118,7 +118,7 @@
   right: 22px;
   width: 32px;
   height: 32px;
-  background: url('../../images/close_icon.png');
+  background: url('../../images/close_icon.svg');
   transition: opacity 0.5s;
   cursor: pointer;
 }
@@ -171,7 +171,7 @@
   width: 26px;
   height: 30px;
   margin-left: 17px;
-  background: #F9F9F9 url('../../images/profile_icon.png') no-repeat center;
+  background: #F9F9F9 url('../../images/profile_icon.svg') no-repeat center;
   border: 0;
   border-radius: 4px;
 }

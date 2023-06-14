@@ -54,6 +54,7 @@ function SignIn(){
     <AuthForm title='Рады видеть!' submit='Войти' description='Ещё не зарегистрированы?' linkText='Регистрация' linkTo='/signup'>
         <div className='auth-form__input-container'>
           <label className='auth-form__label' for='email-input'>E-mail</label>
+          {/* у этого и других инпутов форм есть свойство required */}
           <input className="auth-form__input" type="email" pattern='^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$' value={values.email} id="email-input" name='email' required onChange={onChangeInput}/>
           <span className="auth-form__error">{errors.emailError}</span>
         </div>

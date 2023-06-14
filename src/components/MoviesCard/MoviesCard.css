@@ -57,7 +57,7 @@
   right: 12px;
   width: 16px;
   height: 16px;
-  background: url('../../images/delete-icon.png') no-repeat center;
+  background: url('../../images/delete-icon.svg') no-repeat center;
   transition: opacity 0.5s;
   cursor: pointer;
 }

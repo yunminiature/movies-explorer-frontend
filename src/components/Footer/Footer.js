@@ -10,8 +10,8 @@ function Footer(){
       <div className='footer__underline'>
         <p className='footer__copyright'>©2023</p>
         <ul className='footer__nav-items'>
-          <li className='footer__nav-item'><Link className='footer__link' to='https://practicum.yandex.ru'>Яндекс.Практикум</Link></li>
-          <li className='footer__nav-item'><Link className='footer__link' to='https://github.com/yunminiature'>Github</Link></li>
+          <li className='footer__nav-item'><Link className='footer__link' to='https://practicum.yandex.ru' target='_blank'>Яндекс.Практикум</Link></li>
+          <li className='footer__nav-item'><Link className='footer__link' to='https://github.com/yunminiature' target='_blank'>Github</Link></li>
         </ul>        
       </div>      
     </footer>

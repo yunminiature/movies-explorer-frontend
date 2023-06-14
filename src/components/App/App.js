@@ -12,7 +12,6 @@ import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import './App.css';
 
 function App () {
-  // на этапе level-2 initUserData содержит непустые значения
   const initUserData = {
     name: 'Юлия',
     email: 'yun.miniature@yandex.ru'

@@ -11,11 +11,11 @@
   flex-direction: row;
   justify-content: flex-end;
   border-bottom: 1px solid #E8E8E8;
-  background: url('../../images/search_icon.png') no-repeat left top;
+  background: url('../../images/search_icon.svg') no-repeat left top;
 }
 .search-form__input{
   height: 34px;
-  width: 90%;
+  width: calc(100% - 120px);
   font-weight: 500;
   font-size: 28px;
   line-height: 34px;
@@ -58,9 +58,6 @@
   .search-form{
     padding: 80px 30px 30px;
   }
-  .search-form__input{
-    width: 84%;
-  }
 }
 @media screen and (max-width: 425px) {
   .search-form{
@@ -73,7 +70,7 @@
     width: 100%;
     font-size: 18px;
     line-height: 22px;
-    text-align: start;
+    text-align:left;
   }
   .search-form__toggle-description{
     font-size: 11px;
