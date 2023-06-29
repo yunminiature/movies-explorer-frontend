@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AuthForm from '../AuthForm/AuthForm';
-import { regEmail } from '../../utils/constants';
+import { regEmail, regPassword } from '../../utils/constants';
 
-function SignUp (){
+function SignUp ({onSignUp, submitError}){
   const initialValues = {
     name: '',
     email: '',
@@ -15,6 +15,11 @@ function SignUp (){
   }
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(initialErrors);
+  const [isDisabletSubmit, setIsDisabledSubmit] = useState(false);
+
+  useEffect(() => {
+    setIsDisabledSubmit(errors.emailError || errors.nameError || errors.passwordError || !values.name || !values.email || !values.password);
+  },[errors])
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
@@ -57,6 +62,10 @@ function SignUp (){
           setErrors({...values,
             passwordError:'Поле "Пароль" должно содержать от 8 до 30 символов',
           });
+        } else if (!regPassword.test(value)){
+          setErrors({...values,
+            passwordError:'Поле "Пароль" может содержать только латиницу, кириллицу, пробел или дефис',
+          });
         } else setErrors({...values,
           passwordError:'',
         });
@@ -66,19 +75,27 @@ function SignUp (){
   }
 
   return(
-    <AuthForm title='Добро пожаловать!' submit='Зарегистрироваться' description='Уже зарегистрированы?' linkText='Войти' linkTo='/signin'>
+    <AuthForm 
+      title='Добро пожаловать!'
+      submit='Зарегистрироваться'
+      submitError={submitError}
+      isDisabletSubmit={isDisabletSubmit}
+      description='Уже зарегистрированы?'
+      linkText='Войти'
+      linkTo='/signin'
+      onSubmit={(e) => onSignUp(e, values.email, values.name, values.password)}>
         <div className='auth-form__input-container'>
-          <label className='auth-form__label' for='name-input'>Имя</label>
+          <label className='auth-form__label' htmlFor='name-input'>Имя</label>
           <input className="auth-form__input" type="text" value={values.name} id="name-input" name='name' minLength="2" maxLength="30" required onChange={onChangeInput}/>
           <span className="auth-form__error">{errors.nameError}</span>
         </div>
         <div className='auth-form__input-container'>
-          <label className='auth-form__label' for='email-input'>E-mail</label>
+          <label className='auth-form__label' htmlFor='email-input'>E-mail</label>
           <input className="auth-form__input" type="email" pattern='^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$' value={values.email} id="email-input" name='email' required onChange={onChangeInput}/>
           <span className="auth-form__error">{errors.emailError}</span>
         </div>
         <div className='auth-form__input-container'>
-          <label className='auth-form__label' for='password-input'>Пароль</label>
+          <label className='auth-form__label' htmlFor='password-input'>Пароль</label>
           <input className="auth-form__input" type="password" value={values.password} id="password-input" name='password' minLength="8" maxLength="30" required onChange={onChangeInput}/>
           <span className="auth-form__error">{errors.passwordError}</span>
         </div>

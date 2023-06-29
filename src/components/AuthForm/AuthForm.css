@@ -6,6 +6,7 @@
   margin: auto;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 .auth-form__logo{
   width: 38px;
@@ -45,7 +46,6 @@
   border-bottom: 1px solid #E8E8E8;
   color: #000;
 }
-/* элементы формы выделяются, когда на них установлен фокус */
 .auth-form__input:focus:valid{
   border-bottom: 1px solid #2BE080;
 }
@@ -75,9 +75,25 @@
   transition: opacity 0.5s;
   cursor: pointer;
 }
+.auth-form__submit:disabled{
+  cursor: default;
+  background-color: #A0A0A0;
+}
 .auth-form__submit:hover{
   opacity: 0.65;
   transition: opacity 0.5s;
+}
+.auth-form__submit-error{
+  position: absolute;
+  bottom: 100px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  text-align: center;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #EE3465;
 }
 .auth-form__description{
   margin: 0;
