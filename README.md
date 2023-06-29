@@ -9,3 +9,5 @@
 Backend https://api.bitfilms.nomoredomains.rocks
 Frontend https://bitfilms.nomoredomains.rocks
 IP-адрес 158.160.65.94
+
+Пул реквест level-3: https://github.com/yunminiature/movies-explorer-frontend/pull/2
