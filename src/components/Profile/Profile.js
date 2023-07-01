@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { CurrentUserContext } from '../../context/CurrentUserContext';
 import './Profile.css';
-import { regEmail } from '../../utils/constants';
+import { REGEMAIL } from '../../utils/constants';
 
-function Profile({userName, userEmail, onSubmit, onSignOut}){
+function Profile({onSubmit, onSignOut}){
+  const initUserData = useContext(CurrentUserContext);
   const userData = {
-    name: userName,
-    email: userEmail
+    name: initUserData.name,
+    email: initUserData.email
   }
   const initialErrors = {
     nameError: '',
@@ -13,7 +15,11 @@ function Profile({userName, userEmail, onSubmit, onSignOut}){
   }
   const [values, setValues] = useState(userData);
   const [errors, setErrors] = useState(initialErrors);
+  const [submitResult, setSubmitResult] = useState('');
+  const [rerender, setRerender] = useState(false);
+
   const onChangeInput = (e) => {
+    submitResult && setSubmitResult('');
     const { name, value } = e.target;
     setValues({
       ...values,
@@ -37,7 +43,7 @@ function Profile({userName, userEmail, onSubmit, onSignOut}){
         });
         break;
       case 'email':
-        if (!regEmail.test(value)){
+        if (!REGEMAIL.test(value)){
           setErrors({...values,
             emailError:'Поле "E-mail" должно содержать адрес электронной почты',
           });
@@ -48,9 +54,16 @@ function Profile({userName, userEmail, onSubmit, onSignOut}){
       default:
     }
   }
+  useEffect(() => {
+    if (!rerender){
+      setRerender(true);
+    } else {
+      setSubmitResult('Успех!');
+    }
+  }, [initUserData])
   return(
     <div className='profile'>
-      <h2 className='profile__title'>Привет, {userName}!</h2>
+      <h2 className='profile__title'>Привет, {initUserData.name}!</h2>
       <ul className='profile__user-data-items'>
         <li className='profile__user-data-item'>
           <h4 className='profile__user-data-title'>Имя</h4>
@@ -62,7 +75,8 @@ function Profile({userName, userEmail, onSubmit, onSignOut}){
         </li>
       </ul>
       <p className='profile__user-data-errors'>{errors.nameError}{errors.emailError}</p>
-      <button className='profile__button profile__button_type_edit' disabled={(errors.nameError || errors.emailError || ((values.name === userName) && (values.email === userEmail)))} onClick={() => onSubmit(values.name, values.email)}>Редактировать</button>
+      <p className='profile__user-data-result'>{submitResult}</p>
+      <button className='profile__button profile__button_type_edit' disabled={(errors.nameError || errors.emailError || ((values.name === initUserData.name) && (values.email === initUserData.email)))} onClick={() => onSubmit(values.name, values.email)}>Редактировать</button>
       <button className='profile__button profile__button_type_exit' onClick={onSignOut}>Выйти из аккаунта</button>
     </div>
   )

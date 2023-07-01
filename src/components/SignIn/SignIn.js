@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AuthForm from '../AuthForm/AuthForm';
-import { regEmail } from '../../utils/constants';
+import { REGEMAIL } from '../../utils/constants';
 
 function SignIn({onSignIn, submitError}){
   const initialValues = {
@@ -30,7 +30,7 @@ function SignIn({onSignIn, submitError}){
   const validateInput = ({ name, value }) => {
     switch(name){
       case 'email':
-        if (!regEmail.test(value)){
+        if (!REGEMAIL.test(value)){
           setErrors({...values,
             emailError:'Поле "E-mail" должно содержать адрес электронной почты',
           });

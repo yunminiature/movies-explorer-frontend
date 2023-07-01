@@ -31,23 +31,28 @@ function Movies({movies, loadingMovies, moviesError, saveMovie, deleteMovie}){
     })
     updateMoviesCards();
   }
+  function filterMovies(){
+    return movies.filter(card => (card.nameRU.toLowerCase().indexOf(searchValues.movie.toLowerCase())>=0)&&(searchValues.isShort||(card.duration>40)))
+  }
   const updateMoviesCards = () => {
-    if (!rerender){
-      setRerender(true);
-    } else if (searchValues.movie) {
-      setShowCards(movies.filter(card => (card.nameRU.toLowerCase().indexOf(searchValues.movie.toLowerCase())>=0)&&(searchValues.isShort||(card.duration>40))));
-      localStorage.setItem('movies', JSON.stringify(movies.filter(card => (card.nameRU.toLowerCase().indexOf(searchValues.movie.toLowerCase())>=0)&&(searchValues.isShort||(card.duration>40)))));
+    if (searchValues.movie) {
+      setShowCards(filterMovies());
+      localStorage.setItem('movies', JSON.stringify(filterMovies()));
       localStorage.setItem('moviesSearchBar', searchValues.movie);
       localStorage.setItem('moviesSearchToggle', searchValues.isShort);
-      setSearchError('')
+      filterMovies().length ? setSearchError('') : setSearchError('Ничего не найдено :(') 
     } else {
       setShowCards([]);
       setSearchError('Нужно ввести ключевое слово')
     }
   }
   useEffect(() => {
-    updateMoviesCards()
-  }, [movies])
+    if (!rerender){
+      setRerender(true);
+    } else {
+      updateMoviesCards()
+    }
+  }, [searchValues.isShort])
 
   return(
     <main>

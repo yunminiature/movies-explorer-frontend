@@ -58,6 +58,14 @@
   line-height: 12px;
   color: #EE3465;
 }
+.profile__user-data-result{
+  margin: 20px auto auto;
+  text-align: center;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #2BE080;
+}
 .profile__button{
   margin: 0 auto;
   padding: 0;

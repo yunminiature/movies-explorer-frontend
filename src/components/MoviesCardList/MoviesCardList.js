@@ -1,29 +1,43 @@
 import React, {useState, useEffect} from 'react';
 import './MoviesCardList.css';
-import MoviesCard from '../MoviesCard/MoviesCard'
+import MoviesCard from '../MoviesCard/MoviesCard';
+import {
+  CARDS_MAX_COUNT,
+  CARDS_MED_COUNT,
+  CARDS_MIN_COUNT,
+  ADDING_MAX_COUNT,
+  ADDING_MED_COUNT,
+  ADDING_MIN_COUNT
+} from '../../utils/constants'
 
 function MoviesCardList({cardsArray, isSavedList, saveMovie, deleteMovie}){
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [showCount, setShowCount] = useState(16);
+  const [showCount, setShowCount] = useState(CARDS_MAX_COUNT);
+  const [addingCount, setAddingCount] = useState(ADDING_MAX_COUNT);
 
   const checkCount = () => {
     if (windowWidth >= 1280){
-      setShowCount(16)
+      setShowCount(CARDS_MAX_COUNT)
+      setAddingCount(ADDING_MAX_COUNT)
     } else if (windowWidth >= 768){
-      setShowCount(8)
+      setShowCount(CARDS_MED_COUNT)
+      setAddingCount(ADDING_MED_COUNT)
     } else {
-      setShowCount(4)
+      setShowCount(CARDS_MIN_COUNT)
+      setAddingCount(ADDING_MIN_COUNT)
     }
+  }
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
   }
 
   useEffect(() => {
-    window.addEventListener('resize', (() => {
-      setTimeout(() => {
-        setWindowWidth(window.innerWidth);
-      }, 3000);
-    }));
     checkCount();
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, [windowWidth])
+  
   return(
     <div className='movies__card-list'>
       <ul className='movies__cards'>
@@ -37,7 +51,7 @@ function MoviesCardList({cardsArray, isSavedList, saveMovie, deleteMovie}){
       </ul>
       {
         showCount < cardsArray.length &&
-        <button className='movies__button' onClick={() => setShowCount(showCount+showCount)}>Ещё</button>
+        <button className='movies__button' onClick={() => setShowCount(showCount+addingCount)}>Ещё</button>
       }
     </div>
   )

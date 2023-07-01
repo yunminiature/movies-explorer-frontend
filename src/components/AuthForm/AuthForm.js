@@ -16,7 +16,7 @@ function AuthForm({
 }){
   return(
     <div className='auth-form'>
-      <img className='auth-form__logo' src={logo} alt='Логотип'/>
+      <Link to='/'><img className='auth-form__logo' src={logo} alt='Логотип'/></Link>
       <h2 className='auth-form__title'>{title}</h2>
       <form className='auth-form__form' onSubmit={onSubmit}>
         {children}

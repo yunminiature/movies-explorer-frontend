@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AuthForm from '../AuthForm/AuthForm';
-import { regEmail, regPassword } from '../../utils/constants';
+import { REGEMAIL, REGPASSWORD } from '../../utils/constants';
 
 function SignUp ({onSignUp, submitError}){
   const initialValues = {
@@ -45,7 +45,7 @@ function SignUp ({onSignUp, submitError}){
         });
         break;
       case 'email':
-        if (!regEmail.test(value)){
+        if (!REGEMAIL.test(value)){
           setErrors({...values,
             emailError:'Поле "E-mail" должно содержать адрес электронной почты',
           });
@@ -62,7 +62,7 @@ function SignUp ({onSignUp, submitError}){
           setErrors({...values,
             passwordError:'Поле "Пароль" должно содержать от 8 до 30 символов',
           });
-        } else if (!regPassword.test(value)){
+        } else if (!REGPASSWORD.test(value)){
           setErrors({...values,
             passwordError:'Поле "Пароль" может содержать только латиницу, кириллицу, пробел или дефис',
           });

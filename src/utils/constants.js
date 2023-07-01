@@ -1,4 +1,21 @@
-const regEmail = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
-const regPassword = /^[а-яА-ЯёЁa-zA-Z -]+$/;
+const REGEMAIL = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
+const REGPASSWORD = /^[а-яА-ЯёЁa-zA-Z -]+$/;
+const CARDS_MAX_COUNT = 16;
+const CARDS_MED_COUNT = 8;
+const CARDS_MIN_COUNT = 4;
+const ADDING_MAX_COUNT = 4;
+const ADDING_MED_COUNT = 2;
+const ADDING_MIN_COUNT = 1;
+const SHORT_DURATION = 60;
 
-export {regEmail, regPassword};
+export {
+  REGEMAIL, 
+  REGPASSWORD,
+  CARDS_MAX_COUNT,
+  CARDS_MED_COUNT,
+  CARDS_MIN_COUNT,
+  ADDING_MAX_COUNT,
+  ADDING_MED_COUNT,
+  ADDING_MIN_COUNT,
+  SHORT_DURATION
+};

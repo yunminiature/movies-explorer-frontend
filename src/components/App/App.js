@@ -12,6 +12,7 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import * as mainApi from '../../utils/MainApi.js';
 import * as moviesApi from '../../utils/MoviesApi.js';
+import { CurrentUserContext } from '../../context/CurrentUserContext';
 import './App.css';
 
 function App () {
@@ -33,7 +34,6 @@ function App () {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token){
-      navigate('/', {replace: true})
       mainApi.getUserData()
         .then((userData) => {
           setUserData(userData);
@@ -80,8 +80,8 @@ function App () {
       .then((token) => {
         if (token){
           setSignInError('');
-          setLoggedIn(true);
           navigate('/movies', {replace: true})
+          setLoggedIn(true);
         }
       })
       .catch(err => {
@@ -121,63 +121,63 @@ function App () {
   }
 
   return(
-    <div className='root'>
-      <Routes>
-        <Route path='*' element={<NotFoundPage/>} />
-        <Route path='/' element={
-          <>
-            <Header isLoggedIn={isLoggedIn}/>
-            <Main/>
-            <Footer/>
-          </>
-        }/>
-        <Route path='/movies' element={
-          <>
-            <Header isLoggedIn={isLoggedIn}/>
-            <ProtectedRoute
-              loggedIn={isLoggedIn}
-              element={Movies}
-              movies={movies}
-              loadingMovies={loadingMovies}
-              moviesError={moviesError}
-              saveMovie={handleSaveMovie}
-              deleteMovie={handleDeleteMovie}
-            />
-            <Footer/>
-          </>
-        }/>
-        <Route path='/saved-movies' element={
-          <>
-            <Header isLoggedIn={isLoggedIn}/>
-            <ProtectedRoute
-              loggedIn={isLoggedIn}
-              element={SavedMovies}
-              savedMovies={savedMovies}
-              loadingSavedMovies={loadingSavedMovies}
-              saveMovie={handleSaveMovie}
-              deleteMovie={handleDeleteMovie}
-            />
-            <Footer/>
-          </>
-        }/>
-        <Route path='/signup' element={<SignUp onSignUp={handleSignUp} submitError={signUpError}/>}/>
-        <Route path='/signin' element={<SignIn onSignIn={handleSignIn} submitError={signInError}/>}/>
-        <Route path='/profile' element={
-          <>
-            <Header isLoggedIn={isLoggedIn}/>
-            <ProtectedRoute
-              loggedIn={isLoggedIn}
-              element={Profile}
-              userName={userData.name}
-              userEmail={userData.email}
-              onSubmit={handleProfileEdit}
-              onSignOut={handleSignOut}
-            />
-          </>
-        }/>
-      </Routes>
-      
-    </div>
+    <CurrentUserContext.Provider value={userData}>
+      <div className='root'>
+        <Routes>
+          <Route path='*' element={<NotFoundPage/>} />
+          <Route path='/' element={
+            <>
+              <Header isLoggedIn={isLoggedIn}/>
+              <Main/>
+              <Footer/>
+            </>
+          }/>
+          <Route path='/movies' element={
+            <>
+              <Header isLoggedIn={isLoggedIn}/>
+              <ProtectedRoute
+                loggedIn={isLoggedIn}
+                element={Movies}
+                movies={movies}
+                loadingMovies={loadingMovies}
+                moviesError={moviesError}
+                saveMovie={handleSaveMovie}
+                deleteMovie={handleDeleteMovie}
+              />
+              <Footer/>
+            </>
+          }/>
+          <Route path='/saved-movies' element={
+            <>
+              <Header isLoggedIn={isLoggedIn}/>
+              <ProtectedRoute
+                loggedIn={isLoggedIn}
+                element={SavedMovies}
+                savedMovies={savedMovies}
+                loadingSavedMovies={loadingSavedMovies}
+                saveMovie={handleSaveMovie}
+                deleteMovie={handleDeleteMovie}
+              />
+              <Footer/>
+            </>
+          }/>
+          <Route path='/signup' element={<SignUp onSignUp={handleSignUp} submitError={signUpError}/>}/>
+          <Route path='/signin' element={<SignIn onSignIn={handleSignIn} submitError={signInError}/>}/>
+          <Route path='/profile' element={
+            <>
+              <Header isLoggedIn={isLoggedIn}/>
+              <ProtectedRoute
+                loggedIn={isLoggedIn}
+                element={Profile}
+                onSubmit={handleProfileEdit}
+                onSignOut={handleSignOut}
+              />
+            </>
+          }/>
+        </Routes>
+        
+      </div>
+    </CurrentUserContext.Provider>    
   )
 }
 

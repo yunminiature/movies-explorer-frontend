@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import './MoviesCard.css';
+import { SHORT_DURATION } from '../../utils/constants';
 
 function MoviesCard({card, isSavedList, saveMovie, deleteMovie}){
   const handleClick = () => {
@@ -25,7 +26,7 @@ function MoviesCard({card, isSavedList, saveMovie, deleteMovie}){
       </Link>
       <div className='movies__card-info'>
         <h3 className='movies__card-title'>{card.nameRU}</h3>
-        <p className='movies__card-duration'>{`${Math.floor(card.duration/60)}ч${card.duration%60}м`}</p>
+        <p className='movies__card-duration'>{`${Math.floor(card.duration/SHORT_DURATION)}ч${card.duration%SHORT_DURATION}м`}</p>
         {
           isSavedList ?
           <div className='movies__card-delete' onClick={handleClick}/> :
