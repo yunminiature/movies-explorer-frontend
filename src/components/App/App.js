@@ -44,21 +44,26 @@ function App () {
       setMoviesError('');
       setLoadingMovies(true);
       moviesApi.getMovies()
-        .then((movies) => {
-          setMovies(movies);
+        .then((moviesData) => {
           setLoadingMovies(false);
+
+          setLoadingSavedMovies(true);
+          mainApi.getMovies()
+            .then((savedMoviesData) => {
+              setSavedMovies(savedMoviesData);
+              setMovies(moviesData.map(movie => {
+                for (let i=0;i<savedMoviesData.length; i++){
+                  if (savedMoviesData[i].movieId === movie.id) return { ...movie, saved: savedMoviesData[i]._id }
+                }
+                return { ...movie, saved: '' }
+              }))
+              setLoadingSavedMovies(false);
+            })
+            .catch((err) => console.log(err))
         })
         .catch(() => {
           setMoviesError('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз')
         })
-
-      setLoadingSavedMovies(true);
-      mainApi.getMovies()
-        .then((movies) => {
-          setSavedMovies(movies);
-          setLoadingSavedMovies(false);
-        })
-        .catch((err) => console.log(err))
     }
   }, [isLoggedIn])
 
@@ -80,8 +85,8 @@ function App () {
       .then((token) => {
         if (token){
           setSignInError('');
-          navigate('/movies', {replace: true})
           setLoggedIn(true);
+          navigate('/movies', {replace: true})
         }
       })
       .catch(err => {
@@ -107,7 +112,7 @@ function App () {
         setSavedMovies([
           ...savedMovies, movie
         ])
-        setMovies(movies.map(item => (item.id === movie.movieId ? { ...item, saved: movie._id } : item)))
+        setMovies(movies.map(item => (item.id === movie.movieId ? { ...item, saved: movie.movieId } : item)))
       })
       .catch((err) => console.log(err))
   }

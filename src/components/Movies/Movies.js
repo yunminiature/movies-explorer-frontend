@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
+import { SHORT_DURATION } from '../../utils/constants'
 
 function Movies({movies, loadingMovies, moviesError, saveMovie, deleteMovie}){
   const initSearch = {
@@ -32,7 +33,7 @@ function Movies({movies, loadingMovies, moviesError, saveMovie, deleteMovie}){
     updateMoviesCards();
   }
   function filterMovies(){
-    return movies.filter(card => (card.nameRU.toLowerCase().indexOf(searchValues.movie.toLowerCase())>=0)&&(searchValues.isShort||(card.duration>40)))
+    return movies.filter(card => (card.nameRU.toLowerCase().indexOf(searchValues.movie.toLowerCase())>=0)&&(!searchValues.isShort||(card.duration<SHORT_DURATION)))
   }
   const updateMoviesCards = () => {
     if (searchValues.movie) {
@@ -47,13 +48,14 @@ function Movies({movies, loadingMovies, moviesError, saveMovie, deleteMovie}){
     }
   }
   useEffect(() => {
-    if (!rerender){
-      setRerender(true);
-    } else {
-      updateMoviesCards()
-    }
-  }, [searchValues.isShort])
-
+    if (searchValues !== initSearch){
+      if (!rerender){
+        setRerender(true);
+      } else {
+        updateMoviesCards()
+      } 
+    }       
+  }, [searchValues.isShort, movies])
   return(
     <main>
       <SearchForm 

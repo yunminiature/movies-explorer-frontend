@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
+import { SHORT_DURATION } from '../../utils/constants'
 
 function SavedMovies({savedMovies, loadingSavedMovies, saveMovie, deleteMovie}){
   const initSearch = {
     movie: '',
-    isShort: true
+    isShort: false
   }
   const [showCards, setShowCards] = useState(savedMovies);
   const [searchValues, setSearchValues] = useState(initSearch);
@@ -29,7 +30,7 @@ function SavedMovies({savedMovies, loadingSavedMovies, saveMovie, deleteMovie}){
     updateMoviesCards()
   }
   const updateMoviesCards = () => {
-    setShowCards(savedMovies.filter(card => (card.nameRU.toLowerCase().indexOf(searchValues.movie.toLowerCase())>=0)&&(searchValues.isShort||(card.duration>40))));
+    setShowCards(savedMovies.filter(card => (card.nameRU.toLowerCase().indexOf(searchValues.movie.toLowerCase())>=0)&&(!searchValues.isShort||(card.duration<SHORT_DURATION))));
   }
   useEffect(() => {
     updateMoviesCards();

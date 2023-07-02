@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import {
+  WIDTH_DESKTOP_POINT,
+  WIDTH_PHONE_POINT,
   CARDS_MAX_COUNT,
   CARDS_MED_COUNT,
   CARDS_MIN_COUNT,
@@ -16,10 +18,10 @@ function MoviesCardList({cardsArray, isSavedList, saveMovie, deleteMovie}){
   const [addingCount, setAddingCount] = useState(ADDING_MAX_COUNT);
 
   const checkCount = () => {
-    if (windowWidth >= 1280){
+    if (windowWidth >= WIDTH_DESKTOP_POINT){
       setShowCount(CARDS_MAX_COUNT)
       setAddingCount(ADDING_MAX_COUNT)
-    } else if (windowWidth >= 768){
+    } else if (windowWidth >= WIDTH_PHONE_POINT){
       setShowCount(CARDS_MED_COUNT)
       setAddingCount(ADDING_MED_COUNT)
     } else {
