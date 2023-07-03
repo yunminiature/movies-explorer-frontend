@@ -56,10 +56,6 @@
   font-size: 13px;
   line-height: 18px;
 }
-.header__navbar-item_type_movies{
-  margin-right: 16px;
-  font-weight: 500;
-}
 .header__navbar-item_type_profile{
   margin-left: auto;
 }
@@ -70,6 +66,7 @@
 }
 .header__navbar-link{
   color: #000;
+  margin-right: 16px;
   text-decoration: none;
   transition: opacity 0.5s;
   cursor: pointer;
@@ -77,6 +74,9 @@
 .header__navbar-link:hover{
   opacity: 0.65;
   transition: opacity 0.5s;
+}
+.header__navbar-link.active{
+  font-weight: 500;
 }
 .header__menu-icon{
   height: 43px;

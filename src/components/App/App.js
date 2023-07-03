@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import ProtectedRoute from '../ProtectedRoute';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import SignUp from '../SignUp/SignUp';
@@ -9,52 +10,179 @@ import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
+import * as mainApi from '../../utils/MainApi.js';
+import * as moviesApi from '../../utils/MoviesApi.js';
+import { CurrentUserContext } from '../../context/CurrentUserContext';
 import './App.css';
 
 function App () {
+  const navigate = useNavigate();
   const initUserData = {
-    name: 'Юлия',
-    email: 'yun.miniature@yandex.ru'
+    name: '',
+    email: ''
   }
-  // булевый стейт в компонентах захардкожен на этапе level-2: false в Main и true во всех остальных 
-  //const [isLoggedIn, setLoggedIn] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState(false);
   const [userData, setUserData] = useState(initUserData);
+  const [movies, setMovies] = useState([]);
+  const [savedMovies, setSavedMovies] = useState([]);
+  const [loadingMovies, setLoadingMovies] = useState(false);
+  const [loadingSavedMovies, setLoadingSavedMovies] = useState(false);
+  const [signUpError, setSignUpError] = useState('');
+  const [signInError, setSignInError] = useState('');
+  const [moviesError, setMoviesError] = useState('');
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token){
+      mainApi.getUserData()
+        .then((userData) => {
+          setUserData(userData);
+          setLoggedIn(true);
+        })
+        .catch(err => console.log(err))
+
+      setMoviesError('');
+      setLoadingMovies(true);
+      moviesApi.getMovies()
+        .then((moviesData) => {
+          setLoadingMovies(false);
+
+          setLoadingSavedMovies(true);
+          mainApi.getMovies()
+            .then((savedMoviesData) => {
+              setSavedMovies(savedMoviesData);
+              setMovies(moviesData.map(movie => {
+                for (let i=0;i<savedMoviesData.length; i++){
+                  if (savedMoviesData[i].movieId === movie.id) return { ...movie, saved: savedMoviesData[i]._id }
+                }
+                return { ...movie, saved: '' }
+              }))
+              setLoadingSavedMovies(false);
+            })
+            .catch((err) => console.log(err))
+        })
+        .catch(() => {
+          setMoviesError('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз')
+        })
+    }
+  }, [isLoggedIn])
+
+  const handleSignUp = (e, email, name, password) => {
+    e.preventDefault();
+    mainApi.signup(email, name, password)
+      .then(() => {
+        setSignUpError('');
+        handleSignIn(e, email, password);
+      })
+      .catch(err => {
+        console.log(err);
+        setSignUpError(err.statusText)
+      })
+  }
+  const handleSignIn = (e, email, password) => {
+    e.preventDefault();
+    mainApi.signin(email, password)
+      .then((token) => {
+        if (token){
+          setSignInError('');
+          setLoggedIn(true);
+          navigate('/movies', {replace: true})
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        setSignInError(err.statusText);
+      })   
+  }
+  const handleSignOut = () => {
+    localStorage.clear();
+    setLoggedIn(false);
+    navigate('/', {replace: true});
+  }
+  const handleProfileEdit = (name, email) => {
+    mainApi.updateUserData(name, email)
+      .then((userData) => {
+        setUserData(userData);
+      })
+      .catch((err) => console.log(err))
+  }
+  const handleSaveMovie = (movieData) => {
+    mainApi.saveMovie(movieData)
+      .then((movie) => {
+        setSavedMovies([
+          ...savedMovies, movie
+        ])
+        setMovies(movies.map(item => (item.id === movie.movieId ? { ...item, saved: movie.movieId } : item)))
+      })
+      .catch((err) => console.log(err))
+  }
+  const handleDeleteMovie = (movieId) => {
+    mainApi.deleteMovie(movieId)
+      .then(() => {
+        setSavedMovies(savedMovies.filter((movie) => movie._id !== movieId))
+        setMovies(movies.map(movie => (movie.saved === movieId ? { ...movie, saved: '' } : movie)))
+      })
+      .catch((err) => console.log(err))
+  }
+
   return(
-    <div className='root'>
-      <Routes>
-        <Route path='*' element={<NotFoundPage/>} />
-        <Route path='/' element={
-          <>
-            <Header isLoggedIn={false}/>
-            <Main/>
-            <Footer/>
-          </>
-        }/>
-        <Route path='/movies' element={
-          <>
-            <Header isLoggedIn={true}/>
-            <Movies/>
-            <Footer/>
-          </>
-        }/>
-        <Route path='/saved-movies' element={
-          <>
-            <Header isLoggedIn={true}/>
-            <SavedMovies/>
-            <Footer/>
-          </>
-        }/>
-        <Route path='/signup' element={<SignUp/>}/>
-        <Route path='/signin' element={<SignIn/>}/>
-        <Route path='/profile' element={
-          <>
-            <Header isLoggedIn={true}/>
-            <Profile name={userData.name} email={userData.email}/>
-          </>
-        }/>
-      </Routes>
-      
-    </div>
+    <CurrentUserContext.Provider value={userData}>
+      <div className='root'>
+        <Routes>
+          <Route path='*' element={<NotFoundPage/>} />
+          <Route path='/' element={
+            <>
+              <Header isLoggedIn={isLoggedIn}/>
+              <Main/>
+              <Footer/>
+            </>
+          }/>
+          <Route path='/movies' element={
+            <>
+              <Header isLoggedIn={isLoggedIn}/>
+              <ProtectedRoute
+                loggedIn={isLoggedIn}
+                element={Movies}
+                movies={movies}
+                loadingMovies={loadingMovies}
+                moviesError={moviesError}
+                saveMovie={handleSaveMovie}
+                deleteMovie={handleDeleteMovie}
+              />
+              <Footer/>
+            </>
+          }/>
+          <Route path='/saved-movies' element={
+            <>
+              <Header isLoggedIn={isLoggedIn}/>
+              <ProtectedRoute
+                loggedIn={isLoggedIn}
+                element={SavedMovies}
+                savedMovies={savedMovies}
+                loadingSavedMovies={loadingSavedMovies}
+                saveMovie={handleSaveMovie}
+                deleteMovie={handleDeleteMovie}
+              />
+              <Footer/>
+            </>
+          }/>
+          <Route path='/signup' element={<SignUp onSignUp={handleSignUp} submitError={signUpError}/>}/>
+          <Route path='/signin' element={<SignIn onSignIn={handleSignIn} submitError={signInError}/>}/>
+          <Route path='/profile' element={
+            <>
+              <Header isLoggedIn={isLoggedIn}/>
+              <ProtectedRoute
+                loggedIn={isLoggedIn}
+                element={Profile}
+                onSubmit={handleProfileEdit}
+                onSignOut={handleSignOut}
+              />
+            </>
+          }/>
+        </Routes>
+        
+      </div>
+    </CurrentUserContext.Provider>    
   )
 }
 

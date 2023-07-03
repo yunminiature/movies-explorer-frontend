@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Link} from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import logo from '../../images/logo.svg';
 import './Header.css';
 
@@ -22,16 +22,16 @@ function Header ({isLoggedIn}) {
         </> :
         <>
           <ul className='header__navbar'>
-            <li className='header__navbar-item header__navbar-item_type_movies'><Link className='header__navbar-link' to='/movies'>Фильмы</Link></li>
-            <li className='header__navbar-item'><Link className='header__navbar-link' to='/saved-movies'>Сохраненные фильмы</Link></li>
-            <li className='header__navbar-item header__navbar-item_type_profile'><Link className='header__navbar-link' to='/profile'>Аккаунт <div className='header__profile-icon'/></Link></li>
+            <li className='header__navbar-item'><NavLink className='header__navbar-link' to='/movies'>Фильмы</NavLink></li>
+            <li className='header__navbar-item'><NavLink className='header__navbar-link' to='/saved-movies'>Сохраненные фильмы</NavLink></li>
+            <li className='header__navbar-item header__navbar-item_type_profile'><NavLink className='header__navbar-link' to='/profile'>Аккаунт <div className='header__profile-icon'/></NavLink></li>
           </ul>          
           {isOpenedMenu ?
             <div className='header__menu'>
               <div className='header__menu-container'>
                 <div className='header__menu-close' onClick={closeMenu}/>
                 <ul className='header__menu-items'>
-                  <li className='header__menu-item'><Link to='#' onClick={closeMenu}>Главная</Link></li>
+                  <li className='header__menu-item'><Link to='/' onClick={closeMenu}>Главная</Link></li>
                   <li className='header__menu-item'><Link to='/movies' onClick={closeMenu}>Фильмы</Link></li>
                   <li className='header__menu-item'><Link to='/saved-movies' onClick={closeMenu}>Сохранённые фильмы</Link></li>
                 </ul>
